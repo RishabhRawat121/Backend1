@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from .models import Post, Comment, Like, Notification
 from .serializers import PostSerializer, CommentSerializer, NotificationSerializer
 
+
 # ----------------- Posts -----------------
 class PostListCreateView(generics.ListCreateAPIView):
     queryset = Post.objects.all().select_related("author").prefetch_related("likes", "comments__author")
@@ -19,6 +20,7 @@ class PostListCreateView(generics.ListCreateAPIView):
         return ctx
 
     def perform_create(self, serializer):
+        print("Authenticated user:", self.request.user)
         serializer.save(author=self.request.user)
 
 # ----------------- Likes -----------------
